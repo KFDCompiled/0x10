@@ -1,11 +1,22 @@
 #!/bin/bash
+
+## Simple nmap port scanner
+## Check if argument was given, if not, print usage
+
 target=$1
+
+if [[ -z "$1" ]]
+then
+	echo "[*] Simple nmap port scanning script."
+	echo "[*] Usage   : $0 <target> "
+	exit 0
+fi
 
 ##
 ## TCP
 ##
 echo ""
-echo ""
+echo "Target: " $target
 echo ""
 echo "+--------------------+"
 echo "|  _____ ____ ____   |"
@@ -36,7 +47,7 @@ echo "TCP logic complete."
 ## UDP
 ##
 echo ""
-echo ""
+echo "Target: " $target
 echo ""
 echo "+---------------------+"
 echo "|  _   _ ____  ____   |"
