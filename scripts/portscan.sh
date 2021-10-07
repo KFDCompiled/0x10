@@ -5,7 +5,7 @@
 
 target=$1
 
-if [[ -z "$1" ]]
+if [[ -z "$target" ]]
 then
 	echo "[*] Simple nmap port scanning script."
 	echo "[*] Usage   : $0 <target> "
