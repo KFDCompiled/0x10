@@ -129,6 +129,7 @@ echo -ne " done.\n"
 # Aliases
 echo -ne "Setting aliases . . ."
 alias autorecon='sudo env "PATH=$PATH" autorecon'
+alias cdt='cd $(mktemp -d)'
 echo -ne " done.\n"
 
 # Log configuration
