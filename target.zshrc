@@ -114,7 +114,7 @@ if [[ $localhostipv4 == $vpnlocalipv4 ]]; then
 	echo -ne " LHOST=$vpnlocalipv4 . . ."
 	export LHOST=$vpnlocalipv4
 else
-	echo "Localhost IP variable localhostipv4 is set to $localhostipv4 but vpn local address is $vpnlocalipv4."
+	echo "\nLocalhost IP variable localhostipv4 is set to $localhostipv4 but vpn local address is $vpnlocalipv4."
 	echo "Exiting..."
 	return 1
 fi
