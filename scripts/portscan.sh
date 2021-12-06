@@ -43,7 +43,7 @@ else
 		#  Initial scan for open TCP ports
 		echo "Running default scripts and version detection against following open TCP ports: " $tcpports
 		echo ""
-		sudo nmap --privileged -Pn -sC -sV -p$tcpports $target 2>/dev/null
+		sudo nmap --privileged -O --fuzzy -Pn -sC -sV -p$tcpports $target 2>/dev/null
 	fi
 	echo "TCP logic complete."
 
