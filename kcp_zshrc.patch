@@ -1,0 +1,99 @@
+--- kali.zshrc	2021-12-13 11:21:32.588132595 -0500
++++ .zshrc	2021-12-13 11:28:55.260205465 -0500
+@@ -18,7 +18,6 @@
+ # configure key keybindings
+ bindkey -e                                        # emacs key bindings
+ bindkey ' ' magic-space                           # do history expansion on space
+-bindkey '^U' backward-kill-line                   # ctrl + U
+ bindkey '^[[3;5~' kill-word                       # ctrl + Supr
+ bindkey '^[[3~' delete-char                       # delete
+ bindkey '^[[1;5C' forward-word                    # ctrl + ->
+@@ -34,7 +33,7 @@
+ compinit -d ~/.cache/zcompdump
+ zstyle ':completion:*:*:*:*:*' menu select
+ zstyle ':completion:*' auto-description 'specify: %d'
+-zstyle ':completion:*' completer _expand _complete
++zstyle ':completion:*' completer _expand _complete _correct _approximate
+ zstyle ':completion:*' format 'Completing %d'
+ zstyle ':completion:*' group-name ''
+ zstyle ':completion:*' list-colors ''
+@@ -91,12 +90,26 @@
+     fi
+ fi
+ 
++## <KCP>
++
++if [ ! -z $TARGET ]; then
++    TARGETLINE="──┤%F{red}TARGET=$TARGET%F{%(#.blue.green)}├"
++else
++    TARGETLINE=""
++fi
++
++if [ ! -z $LHOST ]; then
++    LHOSTLINE="┤%F{blue}LHOST=$LHOST%F{%(#.blue.green)}├─"
++else
++    LHOSTLINE=""
++fi
++
+ configure_prompt() {
+     prompt_symbol=㉿
+     [ "$EUID" -eq 0 ] && prompt_symbol=💀
+     case "$PROMPT_ALTERNATIVE" in
+         twoline)
+-            PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
++            PROMPT=$'%F{%(#.blue.green)}┌${TARGETLINE}${LHOSTLINE}─${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+             RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+             ;;
+         oneline)
+@@ -110,6 +123,8 @@
+     esac
+ }
+ 
++## </KCP>
++
+ # The following block is surrounded by two delimiters.
+ # These delimiters must not be modified. Thanks.
+ # START KALI CONFIG VARIABLES
+@@ -251,3 +266,42 @@
+ if [ -f /etc/zsh_command_not_found ]; then
+     . /etc/zsh_command_not_found
+ fi
++
++## <KCP>
++
++# pyenv
++export PYENV_ROOT="$HOME/.pyenv"
++if [[ ":$PATH:" == *":$PYENV_ROOT/bin:"* ]]; then
++    echo -ne "$PYENV_ROOT/bin is in PATH.\n"
++else
++    echo -ne "Adding $PYENV_ROOT/bin to PATH..."
++    export PATH="$PYENV_ROOT/bin:$PATH"
++    echo -ne " done.\n"
++fi
++if command -v pyenv 1>/dev/null 2>&1; then
++  eval "$(pyenv init -)"
++fi
++
++# Autorecon
++alias autorecon="sudo env "PATH=$PATH" autorecon"
++
++LOCALBINPATHARRAY=("$HOME/.local/bin" "$HOME/.local/share/gem/ruby/2.7.0/bin")
++for lbp in ${LOCALBINPATHARRAY[@]}; do
++    if [ -d $lbp ] ; then
++		if [[ ":$PATH:" == *":$lbp:"* ]]; then
++			echo -ne "$lbp is in PATH.\n"
++		else
++			echo -ne "Adding $lbp to PATH..."
++			export PATH="$PATH:$lbp"
++			echo -ne " done.\n"
++		fi
++	else
++		echo -ne "$lbp does not exist.\n"
++	fi
++done
++
++## </KCP>
++
++# 0x10
++source ~/git/0x10/pentest.zshrc_functions
++
