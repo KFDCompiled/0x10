@@ -1,5 +1,5 @@
---- kali.zshrc	2021-12-13 11:21:32.588132595 -0500
-+++ .zshrc	2021-12-13 11:28:55.260205465 -0500
+--- /etc/skel/.zshrc	2021-11-17 23:28:44.000000000 -0500
++++ /home/kali/.zshrc	2021-12-13 17:33:45.893683267 -0500
 @@ -18,7 +18,6 @@
  # configure key keybindings
  bindkey -e                                        # emacs key bindings
@@ -17,7 +17,7 @@
  zstyle ':completion:*' format 'Completing %d'
  zstyle ':completion:*' group-name ''
  zstyle ':completion:*' list-colors ''
-@@ -91,12 +90,26 @@
+@@ -91,12 +90,31 @@
      fi
  fi
  
@@ -27,6 +27,11 @@
 +    TARGETLINE="──┤%F{red}TARGET=$TARGET%F{%(#.blue.green)}├"
 +else
 +    TARGETLINE=""
++fi
++
++if ip link show tun0 > /dev/null 2>&1
++then
++	export LHOST=$(ip address show tun0 | grep -w inet | awk '{print $2}' | cut -d "/" -f 1)
 +fi
 +
 +if [ ! -z $LHOST ]; then
@@ -45,7 +50,7 @@
              RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
              ;;
          oneline)
-@@ -110,6 +123,8 @@
+@@ -110,6 +128,8 @@
      esac
  }
  
@@ -54,7 +59,7 @@
  # The following block is surrounded by two delimiters.
  # These delimiters must not be modified. Thanks.
  # START KALI CONFIG VARIABLES
-@@ -251,3 +266,42 @@
+@@ -251,3 +271,43 @@
  if [ -f /etc/zsh_command_not_found ]; then
      . /etc/zsh_command_not_found
  fi
@@ -97,3 +102,4 @@
 +# 0x10
 +source ~/git/0x10/pentest.zshrc_functions
 +
++export EDITOR=vim
