@@ -1,6 +1,54 @@
 --- /etc/skel/.zshrc	2021-11-17 23:28:44.000000000 -0500
-+++ /home/kali/.zshrc	2021-12-13 17:33:45.893683267 -0500
-@@ -18,7 +18,6 @@
++++ /home/kali/.zshrc	2021-12-28 23:01:28.235204266 -0500
+@@ -1,6 +1,47 @@
+ # ~/.zshrc file for zsh interactive shells.
+ # see /usr/share/doc/zsh/examples/zshrc for examples
+ 
++# Cursor control
++#
++BACK="\033[$1D"
++
++local LC_CTYPE=C
++
++case $(($RANDOM % 7)) in
++0)
++  local spin='⠁⠂⠄⡀⢀⠠⠐⠈'
++  ;;
++1)
++  local spin="▁▂▃▄▅▆▇█▇▆▅▄▃▂▁"
++  ;;
++2)
++  local spin="▉▊▋▌▍▎▏▎▍▌▋▊▉"
++  ;;
++3)
++  local spin='▖▘▝▗'
++  ;;
++4)
++  local spin='┤┘┴└├┌┬┐'
++  ;;
++5)
++  local spin='◢◣◤◥'
++  ;;
++6)
++  local spin='⣾⣽⣻⢿⡿⣟⣯⣷'
++  ;;
++esac
++
++local i=0
++local charwidth=3
++tput civis # cursor invisible
++for j in 1 2; do
++  local i=$(((i + $charwidth) % ${#spin}))
++  printf "%s" "${spin:$i:$charwidth}"
++  echo -ne $BACK
++  sleep 0.1
++done
++
++
+ setopt autocd              # change directory just by typing its name
+ #setopt correct            # auto correct mistakes
+ setopt interactivecomments # allow comments in interactive mode
+@@ -18,7 +59,6 @@
  # configure key keybindings
  bindkey -e                                        # emacs key bindings
  bindkey ' ' magic-space                           # do history expansion on space
@@ -8,7 +56,7 @@
  bindkey '^[[3;5~' kill-word                       # ctrl + Supr
  bindkey '^[[3~' delete-char                       # delete
  bindkey '^[[1;5C' forward-word                    # ctrl + ->
-@@ -34,7 +33,7 @@
+@@ -34,7 +74,7 @@
  compinit -d ~/.cache/zcompdump
  zstyle ':completion:*:*:*:*:*' menu select
  zstyle ':completion:*' auto-description 'specify: %d'
@@ -17,10 +65,17 @@
  zstyle ':completion:*' format 'Completing %d'
  zstyle ':completion:*' group-name ''
  zstyle ':completion:*' list-colors ''
-@@ -91,12 +90,31 @@
+@@ -91,12 +131,38 @@
      fi
  fi
  
++for j in 3 4; do
++  local i=$(((i + $charwidth) % ${#spin}))
++  printf "%s" "${spin:$i:$charwidth}"
++  echo -ne $BACK
++  sleep 0.1
++done
++
 +## <KCP>
 +
 +if [ ! -z $TARGET ]; then
@@ -50,16 +105,23 @@
              RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
              ;;
          oneline)
-@@ -110,6 +128,8 @@
+@@ -110,6 +176,15 @@
      esac
  }
  
 +## </KCP>
 +
++for j in 5 6; do
++  local i=$(((i + $charwidth) % ${#spin}))
++  printf "%s" "${spin:$i:$charwidth}"
++  echo -ne $BACK
++  sleep 0.1
++done
++
  # The following block is surrounded by two delimiters.
  # These delimiters must not be modified. Thanks.
  # START KALI CONFIG VARIABLES
-@@ -251,3 +271,43 @@
+@@ -251,3 +326,57 @@
  if [ -f /etc/zsh_command_not_found ]; then
      . /etc/zsh_command_not_found
  fi
@@ -69,11 +131,13 @@
 +# pyenv
 +export PYENV_ROOT="$HOME/.pyenv"
 +if [[ ":$PATH:" == *":$PYENV_ROOT/bin:"* ]]; then
-+    echo -ne "$PYENV_ROOT/bin is in PATH.\n"
++    # already there, no need to add
++    #echo -ne "$PYENV_ROOT/bin is in PATH.\n"
 +else
-+    echo -ne "Adding $PYENV_ROOT/bin to PATH..."
++    # not there, need to add
++    #echo -ne "Adding $PYENV_ROOT/bin to PATH..."
 +    export PATH="$PYENV_ROOT/bin:$PATH"
-+    echo -ne " done.\n"
++    #echo -ne " done.\n"
 +fi
 +if command -v pyenv 1>/dev/null 2>&1; then
 +  eval "$(pyenv init -)"
@@ -86,20 +150,32 @@
 +for lbp in ${LOCALBINPATHARRAY[@]}; do
 +    if [ -d $lbp ] ; then
 +		if [[ ":$PATH:" == *":$lbp:"* ]]; then
-+			echo -ne "$lbp is in PATH.\n"
++            # already there, no need to add
++			#echo -ne "$lbp is in PATH.\n"
 +		else
-+			echo -ne "Adding $lbp to PATH..."
++            # not there, need to add
++			#echo -ne "Adding $lbp to PATH..."
 +			export PATH="$PATH:$lbp"
-+			echo -ne " done.\n"
++			#echo -ne " done.\n"
 +		fi
 +	else
-+		echo -ne "$lbp does not exist.\n"
++        # element of $LOCALBINARYPATHARRY does not exist on this system
++		#echo -ne "$lbp does not exist.\n"
 +	fi
 +done
++
++export EDITOR=vim
 +
 +## </KCP>
 +
 +# 0x10
 +source ~/git/0x10/pentest.zshrc_functions
 +
-+export EDITOR=vim
++for j in 7 8; do
++  local i=$(((i + $charwidth) % ${#spin}))
++  printf "%s" "${spin:$i:$charwidth}"
++  echo -ne $BACK
++  sleep 0.1
++done
++tput cnorm # reset cursor
++
