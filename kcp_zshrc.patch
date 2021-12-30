@@ -1,5 +1,5 @@
 --- /etc/skel/.zshrc	2021-11-17 23:28:44.000000000 -0500
-+++ /home/kali/.zshrc	2021-12-30 14:39:48.506649423 -0500
++++ /home/kali/.zshrc	2021-12-30 14:56:39.046816060 -0500
 @@ -1,6 +1,47 @@
  # ~/.zshrc file for zsh interactive shells.
  # see /usr/share/doc/zsh/examples/zshrc for examples
@@ -65,7 +65,7 @@
  zstyle ':completion:*' format 'Completing %d'
  zstyle ':completion:*' group-name ''
  zstyle ':completion:*' list-colors ''
-@@ -91,12 +131,38 @@
+@@ -91,12 +131,42 @@
      fi
  fi
  
@@ -77,6 +77,10 @@
 +done
 +
 +## <KCP>
++
++if [ -f ~/.kcp/TARGET ]; then
++    TARGET=$(cat ~/.kcp/TARGET)
++fi
 +
 +if [ ! -z $TARGET ]; then
 +    TARGETLINE="──┤%F{red}TARGET=$TARGET%F{%(#.blue.green)}├"
@@ -105,7 +109,7 @@
              RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
              ;;
          oneline)
-@@ -110,6 +176,15 @@
+@@ -110,6 +180,15 @@
      esac
  }
  
@@ -121,7 +125,7 @@
  # The following block is surrounded by two delimiters.
  # These delimiters must not be modified. Thanks.
  # START KALI CONFIG VARIABLES
-@@ -251,3 +326,57 @@
+@@ -251,3 +330,57 @@
  if [ -f /etc/zsh_command_not_found ]; then
      . /etc/zsh_command_not_found
  fi
