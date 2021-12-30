@@ -1,5 +1,5 @@
 --- /etc/skel/.zshrc	2021-11-17 23:28:44.000000000 -0500
-+++ /home/kali/.zshrc	2021-12-28 23:01:28.235204266 -0500
++++ /home/kali/.zshrc	2021-12-30 14:39:48.506649423 -0500
 @@ -1,6 +1,47 @@
  # ~/.zshrc file for zsh interactive shells.
  # see /usr/share/doc/zsh/examples/zshrc for examples
@@ -178,4 +178,4 @@
 +  sleep 0.1
 +done
 +tput cnorm # reset cursor
-+
++local LC_CTYPE=
