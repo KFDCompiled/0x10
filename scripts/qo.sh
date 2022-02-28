@@ -6,7 +6,7 @@ if [[ "$#" -ne 0 ]]; then
 	exit 1
 else
 	if [[ -f scans/xml/_full_tcp_nmap.xml ]]; then
-		echo -ne "\n$(xmlstarlet select -t -v "count(/nmaprun/host/ports/port)" scans/xml/_full_tcp_nmap.xml) open TCP ports.\n"
+		echo -ne "\nHost $(xmlstarlet select -t -v "/nmaprun/@args" scans/xml/_full_tcp_nmap.xml | grep -o '[^ ]*$') has $(xmlstarlet select -t -v "count(/nmaprun/host/ports/port)" scans/xml/_full_tcp_nmap.xml) open TCP ports.\n"
 		echo -ne "TCP PORT\tSERVICE\t\tPRODUCT\n"
 		for port in $(xmlstarlet select -t -v '/nmaprun/host/ports/port/@portid' scans/xml/_full_tcp_nmap.xml); do
 			if [[ "${#port}" -lt 4 ]]; then
@@ -19,7 +19,7 @@ else
 		echo -ne "\n[*]\tERROR: cannot find $PWD/scans/xml/_full_tcp_nmap.xml!\n[*]\tSkipping...\n"
 	fi
 	if [[ -f scans/xml/_top_100_udp_nmap.xml ]]; then
-	    echo -ne "\n$(xmlstarlet select -t -v "count(/nmaprun/host/ports/port)" scans/xml/_top_100_udp_nmap.xml) open UDP ports.\n"
+	    echo -ne "\nHost $(xmlstarlet select -t -v "/nmaprun/@args" scans/xml/_top_100_udp_nmap.xml | grep -o '[^ ]*$') has $(xmlstarlet select -t -v "count(/nmaprun/host/ports/port)" scans/xml/_top_100_udp_nmap.xml) open UDP ports.\n"
 	    echo -ne "UDP PORT\tSERVICE\t\tPRODUCT\n"
 		for port in $(xmlstarlet select -t -v '/nmaprun/host/ports/port/@portid' scans/xml/_top_100_udp_nmap.xml); do
 			if [[ "${#port}" -lt 4 ]]; then
