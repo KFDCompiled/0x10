@@ -1,0 +1,1 @@
+ip a show $(route | grep default | awk '{print $8}') | grep -w inet | awk -F'[[:space:]/]+' '{print $3}'

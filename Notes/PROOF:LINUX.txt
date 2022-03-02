@@ -1,0 +1,1 @@
+uname -a && blkid && ip a show $(route | awk '/default/ {print $NF}') && whoami && cat /root/proof.txt

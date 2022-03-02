@@ -1,0 +1,1 @@
+whoami && hostname && systeminfo /fo csv /nh && ipconfig && type C:\Users\Administrator\Desktop\proof.txt

