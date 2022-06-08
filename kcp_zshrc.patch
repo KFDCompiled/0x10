@@ -1,83 +1,9 @@
---- /etc/skel/.zshrc	2021-11-17 23:28:44.000000000 -0500
-+++ /home/kali/.zshrc	2021-12-30 14:56:39.046816060 -0500
-@@ -1,6 +1,47 @@
- # ~/.zshrc file for zsh interactive shells.
- # see /usr/share/doc/zsh/examples/zshrc for examples
- 
-+# Cursor control
-+#
-+BACK="\033[$1D"
-+
-+local LC_CTYPE=C
-+
-+case $(($RANDOM % 7)) in
-+0)
-+  local spin='⠁⠂⠄⡀⢀⠠⠐⠈'
-+  ;;
-+1)
-+  local spin="▁▂▃▄▅▆▇█▇▆▅▄▃▂▁"
-+  ;;
-+2)
-+  local spin="▉▊▋▌▍▎▏▎▍▌▋▊▉"
-+  ;;
-+3)
-+  local spin='▖▘▝▗'
-+  ;;
-+4)
-+  local spin='┤┘┴└├┌┬┐'
-+  ;;
-+5)
-+  local spin='◢◣◤◥'
-+  ;;
-+6)
-+  local spin='⣾⣽⣻⢿⡿⣟⣯⣷'
-+  ;;
-+esac
-+
-+local i=0
-+local charwidth=3
-+tput civis # cursor invisible
-+for j in 1 2; do
-+  local i=$(((i + $charwidth) % ${#spin}))
-+  printf "%s" "${spin:$i:$charwidth}"
-+  echo -ne $BACK
-+  sleep 0.1
-+done
-+
-+
- setopt autocd              # change directory just by typing its name
- #setopt correct            # auto correct mistakes
- setopt interactivecomments # allow comments in interactive mode
-@@ -18,7 +59,6 @@
- # configure key keybindings
- bindkey -e                                        # emacs key bindings
- bindkey ' ' magic-space                           # do history expansion on space
--bindkey '^U' backward-kill-line                   # ctrl + U
- bindkey '^[[3;5~' kill-word                       # ctrl + Supr
- bindkey '^[[3~' delete-char                       # delete
- bindkey '^[[1;5C' forward-word                    # ctrl + ->
-@@ -34,7 +74,7 @@
- compinit -d ~/.cache/zcompdump
- zstyle ':completion:*:*:*:*:*' menu select
- zstyle ':completion:*' auto-description 'specify: %d'
--zstyle ':completion:*' completer _expand _complete
-+zstyle ':completion:*' completer _expand _complete _correct _approximate
- zstyle ':completion:*' format 'Completing %d'
- zstyle ':completion:*' group-name ''
- zstyle ':completion:*' list-colors ''
-@@ -91,12 +131,42 @@
+--- /etc/skel/.zshrc	2022-04-29 07:59:40.000000000 -0400
++++ /home/kali/.zshrc	2022-06-07 20:52:12.200657348 -0400
+@@ -91,13 +91,36 @@
      fi
  fi
  
-+for j in 3 4; do
-+  local i=$(((i + $charwidth) % ${#spin}))
-+  printf "%s" "${spin:$i:$charwidth}"
-+  echo -ne $BACK
-+  sleep 0.1
-+done
-+
-+## <KCP>
-+
 +if [ -f ~/.kcp/TARGET ]; then
 +    TARGET=$(cat ~/.kcp/TARGET)
 +fi
@@ -99,87 +25,32 @@
 +    LHOSTLINE=""
 +fi
 +
++
++
  configure_prompt() {
      prompt_symbol=㉿
-     [ "$EUID" -eq 0 ] && prompt_symbol=💀
+     # Skull emoji for root terminal
+     #[ "$EUID" -eq 0 ] && prompt_symbol=💀
      case "$PROMPT_ALTERNATIVE" in
          twoline)
--            PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
-+            PROMPT=$'%F{%(#.blue.green)}┌${TARGETLINE}${LHOSTLINE}─${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
-             RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+-            PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n'$prompt_symbol$'%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
++            PROMPT=$'%F{%(#.blue.green)}┌${TARGETLINE}${LHOSTLINE}──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n'$prompt_symbol$'%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+             # Right-side prompt with exit codes and background processes
+             #RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
              ;;
-         oneline)
-@@ -110,6 +180,15 @@
-     esac
- }
- 
-+## </KCP>
-+
-+for j in 5 6; do
-+  local i=$(((i + $charwidth) % ${#spin}))
-+  printf "%s" "${spin:$i:$charwidth}"
-+  echo -ne $BACK
-+  sleep 0.1
-+done
-+
- # The following block is surrounded by two delimiters.
- # These delimiters must not be modified. Thanks.
- # START KALI CONFIG VARIABLES
-@@ -251,3 +330,57 @@
+@@ -256,3 +279,15 @@
  if [ -f /etc/zsh_command_not_found ]; then
      . /etc/zsh_command_not_found
  fi
 +
-+## <KCP>
-+
-+# pyenv
-+export PYENV_ROOT="$HOME/.pyenv"
-+if [[ ":$PATH:" == *":$PYENV_ROOT/bin:"* ]]; then
-+    # already there, no need to add
-+    #echo -ne "$PYENV_ROOT/bin is in PATH.\n"
-+else
-+    # not there, need to add
-+    #echo -ne "Adding $PYENV_ROOT/bin to PATH..."
-+    export PATH="$PYENV_ROOT/bin:$PATH"
-+    #echo -ne " done.\n"
-+fi
 +if command -v pyenv 1>/dev/null 2>&1; then
-+  eval "$(pyenv init -)"
++  eval $(pyenv init -)
 +fi
 +
-+# Autorecon
-+alias autorecon="sudo env "PATH=$PATH" autorecon"
++# Created by `pipx` on 2022-06-07 23:05:24
++export PATH="$PATH:/home/kali/.local/bin"
 +
-+LOCALBINPATHARRAY=("$HOME/.local/bin" "$HOME/.local/share/gem/ruby/2.7.0/bin")
-+for lbp in ${LOCALBINPATHARRAY[@]}; do
-+    if [ -d $lbp ] ; then
-+		if [[ ":$PATH:" == *":$lbp:"* ]]; then
-+            # already there, no need to add
-+			#echo -ne "$lbp is in PATH.\n"
-+		else
-+            # not there, need to add
-+			#echo -ne "Adding $lbp to PATH..."
-+			export PATH="$PATH:$lbp"
-+			#echo -ne " done.\n"
-+		fi
-+	else
-+        # element of $LOCALBINARYPATHARRY does not exist on this system
-+		#echo -ne "$lbp does not exist.\n"
-+	fi
-+done
++# kcp https://github.com/KFDCompiled/0x10
++source /home/kali/git/0x10/pentest.zshrc_functions
++export PATH="/home/kali/git/0x10/scripts:$PATH"
 +
-+export EDITOR=vim
-+
-+## </KCP>
-+
-+# 0x10
-+source ~/git/0x10/pentest.zshrc_functions
-+
-+for j in 7 8; do
-+  local i=$(((i + $charwidth) % ${#spin}))
-+  printf "%s" "${spin:$i:$charwidth}"
-+  echo -ne $BACK
-+  sleep 0.1
-+done
-+tput cnorm # reset cursor
-+local LC_CTYPE=
