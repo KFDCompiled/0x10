@@ -38,19 +38,3 @@
              # Right-side prompt with exit codes and background processes
              #RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
              ;;
-@@ -256,3 +279,15 @@
- if [ -f /etc/zsh_command_not_found ]; then
-     . /etc/zsh_command_not_found
- fi
-+
-+if command -v pyenv 1>/dev/null 2>&1; then
-+  eval $(pyenv init -)
-+fi
-+
-+# Created by `pipx` on 2022-06-07 23:05:24
-+export PATH="$PATH:/home/kali/.local/bin"
-+
-+# kcp https://github.com/KFDCompiled/0x10
-+source /home/kali/git/0x10/pentest.zshrc_functions
-+export PATH="/home/kali/git/0x10/scripts:$PATH"
-+
